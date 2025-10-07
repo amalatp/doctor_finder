@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'routes.g.dart';
+
 enum AppRoutes { splash, onboarding, signIn, doctorRegister, userRegister }
 
 @riverpod

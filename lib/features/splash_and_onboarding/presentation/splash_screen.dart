@@ -1,4 +1,7 @@
+import 'package:doctor_finder/routes/routes.dart';
+import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<Offset> _loadingAnimation;
+  late Animation<Offset> _logoAnimation;
   late Animation<Offset> _textAnimation;
 
   @override
@@ -23,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
 
-    _loadingAnimation = Tween<Offset>(
+    _logoAnimation = Tween<Offset>(
       begin: const Offset(0, -1),
       end: const Offset(0, 0),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
@@ -43,7 +46,11 @@ class _SplashScreenState extends State<SplashScreen>
     final pref = await SharedPreferences.getInstance();
     final hasSeenOnboarding = pref.getBool('hasSeenOnboarding') ?? false;
 
-    if (hasSeenOnboarding) {}
+    if (hasSeenOnboarding) {
+      context.goNamed(AppRoutes.signIn.name);
+    } else {
+      context.goNamed(AppRoutes.onboarding.name);
+    }
   }
 
   @override
@@ -54,6 +61,35 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      backgroundColor: AppStyles.mainColor,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SlideTransition(
+              position: _logoAnimation,
+              child: Image.asset('assets/images/doctor_logo.png', width: 150),
+            ),
+            const SizedBox(height: 20),
+            SlideTransition(
+              position: _textAnimation,
+              child: Text(
+                'Find Doctors Near You',
+                style: AppStyles.titleTextStyle,
+              ),
+            ),
+            SlideTransition(
+              position: _textAnimation,
+              child: Text(
+                'No More Doctor Trouble',
+                style: AppStyles.normalTextStyle,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
