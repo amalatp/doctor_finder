@@ -1,5 +1,6 @@
 import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
+import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,6 +27,10 @@ class MyApp extends ConsumerWidget {
         fontFamily: 'Madimi One',
         useMaterial3: true,
       ),
+      builder: (context, child) {
+        SizeCofig.init(context);
+        return child!;
+      },
     );
   }
 }

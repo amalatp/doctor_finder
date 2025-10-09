@@ -58,91 +58,94 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            itemCount: _pages.length,
-            onPageChanged: _onPagechanged,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Image.asset(_pages[index]['image']!, height: 250),
-                  const SizedBox(height: 20),
-                  Text(
-                    _pages[index]['title']!,
-                    style: AppStyles.headingTextStyle.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Text(
-                      _pages[index]['description']!,
-                      style: AppStyles.titleTextStyle.copyWith(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              itemCount: _pages.length,
+              onPageChanged: _onPagechanged,
+              itemBuilder: (context, index) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(_pages[index]['image']!, height: 250),
+                    const SizedBox(height: 20),
+                    Text(
+                      _pages[index]['title']!,
+                      style: AppStyles.headingTextStyle.copyWith(
                         color: Colors.black,
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-          Positioned(
-            top: 40,
-            right: 20,
-            child: _currentIndex < _pages.length - 1
-                ? GestureDetector(
-                    child: Text(
-                      'Skip',
-                      style: AppStyles.normalTextStyle.copyWith(
-                        color: Colors.black,
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Text(
+                        _pages[index]['description']!,
+                        style: AppStyles.titleTextStyle.copyWith(
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  )
-                : const SizedBox(),
-          ),
-          Positioned(
-            bottom: 80,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                _pages.length,
-                (index) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  height: _currentIndex == index ? 12 : 8,
-                  width: _currentIndex == index ? 12 : 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentIndex == index
-                        ? AppStyles.mainColor
-                        : Colors.grey,
-                  ),
-                ),
-              ),
+                  ],
+                );
+              },
             ),
-          ),
-          if (_currentIndex == _pages.length - 1)
             Positioned(
-              bottom: 40,
-              left: 30,
-              right: 30,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              top: 20,
+              right: 20,
+              child: _currentIndex < _pages.length - 1
+                  ? GestureDetector(
+                      child: Text(
+                        'Skip',
+                        style: AppStyles.normalTextStyle.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ),
+            Positioned(
+              bottom: 80,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _pages.length,
+                  (index) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    height: _currentIndex == index ? 12 : 8,
+                    width: _currentIndex == index ? 12 : 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentIndex == index
+                          ? AppStyles.mainColor
+                          : Colors.grey,
+                    ),
                   ),
                 ),
-                onPressed: _completeOnbarding,
-                child: Text('Login to App', style: AppStyles.titleTextStyle),
               ),
             ),
-        ],
+            if (_currentIndex == _pages.length - 1)
+              Positioned(
+                bottom: 40,
+                left: 30,
+                right: 30,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: _completeOnbarding,
+                  child: Text('Login to App', style: AppStyles.titleTextStyle),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
