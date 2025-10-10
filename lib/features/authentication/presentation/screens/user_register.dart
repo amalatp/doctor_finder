@@ -84,7 +84,10 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
                     child: CircleAvatar(
                       backgroundImage: _selectedImage != null
                           ? FileImage(_selectedImage!)
-                          : const AssetImage('assets/images/placeholder.png'),
+                          : const AssetImage(
+                              'assets/images/doctor-placeholder.jpg',
+                            ),
+                      radius: SizeCofig.getProportionateHeight(60),
                     ),
                   ),
                 ],
