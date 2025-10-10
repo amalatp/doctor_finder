@@ -25,6 +25,9 @@ class CommonButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           color: AppStyles.mainColor,
         ),
+        child: isLoading
+            ? CircularProgressIndicator()
+            : Text(title, style: AppStyles.normalTextStyle),
       ),
     );
   }

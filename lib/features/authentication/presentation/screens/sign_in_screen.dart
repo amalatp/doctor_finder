@@ -1,8 +1,12 @@
+import 'package:doctor_finder/common_widgets/common_button.dart';
+import 'package:doctor_finder/common_widgets/common_container.dart';
 import 'package:doctor_finder/features/authentication/presentation/widgets/common_text_field.dart';
+import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -38,7 +42,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             child: Column(
               children: [
                 Image.asset(
-                  'assest/images/doctor_logo.png',
+                  'assets/images/doctor_logo.png',
                   height: SizeCofig.getProportionateHeight(100),
                 ),
                 Text(
@@ -51,7 +55,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   hintText: 'Enter you email',
                   textInputType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
                 CommonTextField(
                   controller: _passwordController,
                   hintText: 'Enter password',
@@ -59,6 +63,27 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 15),
+                CommonButton(isLoading: false, onTap: () {}, title: 'Sign In'),
+                const SizedBox(height: 15),
+                Text(
+                  'OR',
+                  style: AppStyles.titleTextStyle.copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 15),
+                CommonContainer(
+                  text: 'Register as a User',
+                  onTap: () {
+                    context.goNamed(AppRoutes.userRegister.name);
+                  },
+                ),
+                const SizedBox(height: 10),
+                CommonContainer(
+                  text: 'Register as a Doctor',
+                  onTap: () {
+                    context.goNamed(AppRoutes.doctorRegister.name);
+                  },
+                ),
+                const SizedBox(height: 30),
               ],
             ),
           ),
