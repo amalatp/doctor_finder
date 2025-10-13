@@ -1,3 +1,4 @@
+import 'package:doctor_finder/features/authentication/presentation/screens/doctor_register.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/user_register.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/onboarding_screen.dart';
@@ -35,6 +36,11 @@ GoRouter goRouter(Ref ref) {
         path: '/userRegister',
         name: AppRoutes.userRegister.name,
         builder: (context, state) => const UserRegister(),
+      ),
+      GoRoute(
+        path: '/doctorRegister',
+        name: AppRoutes.doctorRegister.name,
+        builder: (context, state) => const DoctorRegister(),
       ),
     ],
   );

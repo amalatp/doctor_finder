@@ -6,25 +6,29 @@ import 'package:doctor_finder/features/authentication/presentation/widgets/commo
 import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
+import 'package:doctor_finder/utils/specialisation_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UserRegister extends ConsumerStatefulWidget {
-  const UserRegister({super.key});
+class DoctorRegister extends ConsumerStatefulWidget {
+  const DoctorRegister({super.key});
 
   @override
-  ConsumerState<UserRegister> createState() => _UserRegisterState();
+  ConsumerState<DoctorRegister> createState() => _DoctorRegisterState();
 }
 
-class _UserRegisterState extends ConsumerState<UserRegister> {
+class _DoctorRegisterState extends ConsumerState<DoctorRegister> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _locationController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _yearsOfExperienceController = TextEditingController();
   File? _selectedImage;
+  String? _selectedSpecialisation;
 
   void _takePicture() async {
     final imagePicker = ImagePicker();
@@ -46,11 +50,14 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
     _nameController.dispose();
     _phoneNumberController.dispose();
     _locationController.dispose();
+    _descriptionController.dispose();
+    _yearsOfExperienceController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final listOfSpecialisations = ref.watch(specialisationProvider);
     return Scaffold(
       backgroundColor: AppStyles.mainColor,
       body: SafeArea(
@@ -70,7 +77,7 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
                     height: SizeCofig.getProportionateHeight(100),
                   ),
                   Text(
-                    'User Registration',
+                    'Doctor Registration',
                     style: AppStyles.titleTextStyle.copyWith(
                       color: Colors.black,
                     ),
@@ -110,6 +117,51 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
                   ),
                   const SizedBox(height: 10),
                   CommonTextField(
+                    controller: _descriptionController,
+                    hintText: 'Enter Description',
+                    textInputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 10),
+                  CommonTextField(
+                    controller: _yearsOfExperienceController,
+                    hintText: 'Enter Years of Experience',
+                    textInputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      hintText: 'Select Specialisation',
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      // contentPadding: const EdgeInsets.symmetric(
+                      //   horizontal: 10,
+                      //   vertical: 5,
+                      // ),
+                    ),
+                    initialValue: _selectedSpecialisation,
+                    items: listOfSpecialisations
+                        .map(
+                          (specialisation) => DropdownMenuItem<String>(
+                            value: specialisation,
+                            child: Text(
+                              specialisation,
+                              style: AppStyles.normalTextStyle.copyWith(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedSpecialisation = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  CommonTextField(
                     controller: _emailController,
                     hintText: 'Enter Email',
                     textInputType: TextInputType.emailAddress,
@@ -134,7 +186,7 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
                     ),
                   ),
                   CommonContainer(
-                    text: "sign in to my account",
+                    text: "Sign in to my account",
                     onTap: () {
                       context.goNamed(AppRoutes.signIn.name);
                     },
