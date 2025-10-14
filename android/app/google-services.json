@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "230962248159",
+    "project_id": "doctor-finder-app-bad90",
+    "storage_bucket": "doctor-finder-app-bad90.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230962248159:android:eb30ea161993a86af1ec6a",
+        "android_client_info": {
+          "package_name": "com.example.doctor_finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAFNIRUF5kjvEgJaHwEyGONlKDtVE_uTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

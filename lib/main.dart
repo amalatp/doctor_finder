@@ -1,10 +1,14 @@
+import 'package:doctor_finder/firebase_options.dart';
 import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const MyApp()));
 }
 
