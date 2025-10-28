@@ -5,11 +5,16 @@ import 'package:doctor_finder/common_widgets/common_container.dart';
 import 'package:doctor_finder/features/authentication/presentation/widgets/common_text_field.dart';
 import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
+import 'package:doctor_finder/utils/keys.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart'
+    as places;
 
 class UserRegister extends ConsumerStatefulWidget {
   const UserRegister({super.key});
@@ -38,6 +43,10 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
       _selectedImage = File(pickedImage.path);
     });
   }
+
+  final _places = places.FlutterGooglePlacesSdk(AppKeys.googlePlacesKey);
+  double? _latitude;
+  double? _longitude;
 
   @override
   void dispose() {
@@ -109,6 +118,49 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
                     textInputType: TextInputType.number,
                   ),
                   const SizedBox(height: 10),
+                  GooglePlaceAutoCompleteTextField(
+                    textEditingController: _locationController,
+                    googleAPIKey: AppKeys.googlePlacesKey,
+                    debounceTime: 400,
+                    isLatLngRequired: true,
+                    inputDecoration: InputDecoration(
+                      hintText: 'Enter your location',
+                      hintStyle: AppStyles.normalTextStyle.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                    itemClick: (Prediction prediction) async {
+                      setState(() {
+                        _locationController.text = prediction.description ?? "";
+                      });
+                      final detail = await _places.fetchPlace(
+                        prediction.placeId!,
+                        fields: [
+                          places.PlaceField.Location,
+                          places.PlaceField.Name,
+                          places.PlaceField.Address,
+                        ],
+                      );
+                      _latitude = detail.place?.latLng?.lat;
+                      _longitude = detail.place?.latLng?.lng;
+                      _locationController
+                          .selection = TextSelection.fromPosition(
+                        TextPosition(offset: prediction.description!.length),
+                      );
+                    },
+                    itemBuilder: (context, index, prediction) {
+                      return Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.location_on),
+                            const SizedBox(width: 7),
+                            Expanded(child: Text(prediction.description ?? '')),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                   CommonTextField(
                     controller: _emailController,
                     hintText: 'Enter Email',
