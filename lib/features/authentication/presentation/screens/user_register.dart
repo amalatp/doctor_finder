@@ -64,7 +64,7 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
       backgroundColor: AppStyles.mainColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsGeometry.fromLTRB(10, 10, 100, 0),
+          padding: EdgeInsetsGeometry.fromLTRB(10, 10, 10, 0),
           child: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(10),
@@ -161,6 +161,7 @@ class _UserRegisterState extends ConsumerState<UserRegister> {
                       );
                     },
                   ),
+                  const SizedBox(height: 10),
                   CommonTextField(
                     controller: _emailController,
                     hintText: 'Enter Email',

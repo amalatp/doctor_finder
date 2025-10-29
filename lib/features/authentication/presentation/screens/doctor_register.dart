@@ -62,7 +62,7 @@ class _DoctorRegisterState extends ConsumerState<DoctorRegister> {
       backgroundColor: AppStyles.mainColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsGeometry.fromLTRB(10, 10, 100, 0),
+          padding: EdgeInsetsGeometry.fromLTRB(10, 10, 10, 0),
           child: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(10),
