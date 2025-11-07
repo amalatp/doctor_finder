@@ -5,6 +5,9 @@ import 'package:doctor_finder/features/authentication/domain/app_user.dart';
 import 'package:doctor_finder/features/authentication/domain/doctor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'auth_repository.g.dart';
 
 class AuthRepository {
   AuthRepository(this._auth);
@@ -118,4 +121,21 @@ class AuthRepository {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+}
+
+@riverpod
+AuthRepository authRepository(Ref ref) {
+  return AuthRepository(FirebaseAuth.instance);
+}
+
+@riverpod
+Stream<User?> authStateChanges(Ref ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.authStateChanges;
+}
+
+@riverpod
+User? currentUser(Ref ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.currentUser;
 }
