@@ -1,5 +1,7 @@
+import 'package:doctor_finder/common_widgets/async_value_ui.dart';
 import 'package:doctor_finder/common_widgets/common_button.dart';
 import 'package:doctor_finder/common_widgets/common_container.dart';
+import 'package:doctor_finder/features/authentication/presentation/controller/auth_controller.dart';
 import 'package:doctor_finder/features/authentication/presentation/widgets/common_text_field.dart';
 import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
@@ -28,6 +30,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(authControllerProvider);
+    ref.listen<AsyncValue>(authControllerProvider, (_, state) {
+      state.showAlertDialogOnError(context);
+    });
     return Scaffold(
       backgroundColor: AppStyles.mainColor,
       body: SafeArea(
@@ -68,8 +74,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   const SizedBox(height: 15),
                   CommonButton(
-                    isLoading: false,
-                    onTap: () {},
+                    isLoading: state.isLoading,
+                    onTap: () {
+                      final email = _emailController.text.trim();
+                      final password = _passwordController.text;
+                      ref
+                          .read(authControllerProvider.notifier)
+                          .signInWithEmailAndPassword(email, password);
+                    },
                     title: 'Sign In',
                   ),
                   const SizedBox(height: 15),
