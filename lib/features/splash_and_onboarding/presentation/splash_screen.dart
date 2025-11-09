@@ -1,5 +1,6 @@
 import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,8 +46,11 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(seconds: 3));
     final pref = await SharedPreferences.getInstance();
     final hasSeenOnboarding = pref.getBool('hasSeenOnboarding') ?? false;
+    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
 
-    if (hasSeenOnboarding) {
+    if (isLoggedIn) {
+      context.goNamed(AppRoutes.main.name);
+    } else if (hasSeenOnboarding) {
       context.goNamed(AppRoutes.signIn.name);
     } else {
       context.goNamed(AppRoutes.onboarding.name);

@@ -3,19 +3,47 @@ import 'package:doctor_finder/features/authentication/presentation/screens/sign_
 import 'package:doctor_finder/features/authentication/presentation/screens/user_register.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/onboarding_screen.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/splash_screen.dart';
+import 'package:doctor_finder/features/user_management/presentation/screens/main_screen.dart';
+import 'package:doctor_finder/routes/go_router_refresh_stream.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'routes.g.dart';
 
-enum AppRoutes { splash, onboarding, signIn, doctorRegister, userRegister }
+enum AppRoutes {
+  splash,
+  onboarding,
+  signIn,
+  doctorRegister,
+  userRegister,
+  main,
+}
+
+final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
 
 @riverpod
 GoRouter goRouter(Ref ref) {
+  final firebaseAuth = ref.watch(firebaseAuthProvider);
   return GoRouter(
     initialLocation: '/splash',
     debugLogDiagnostics: false,
+    redirect: (context, state) {
+      final isLoggedIn = firebaseAuth.currentUser != null;
+      if (isLoggedIn &&
+          (state.uri.toString() == '/signIn' ||
+              state.uri.toString() == '/userRegister' ||
+              state.uri.toString() == '/doctorRegister')) {
+        return '/home';
+      } else if (!isLoggedIn &&
+          (state.uri.toString() != '/home' ||
+              state.uri.toString() != '/account')) {
+        return '/signIn';
+      }
+      return null;
+    },
+    refreshListenable: GoRouterRefreshStream(firebaseAuth.authStateChanges()),
     routes: [
       GoRoute(
         path: '/splash',
@@ -41,6 +69,11 @@ GoRouter goRouter(Ref ref) {
         path: '/doctorRegister',
         name: AppRoutes.doctorRegister.name,
         builder: (context, state) => const DoctorRegister(),
+      ),
+      GoRoute(
+        path: '/main',
+        name: AppRoutes.main.name,
+        builder: (context, state) => const MainScreen(),
       ),
     ],
   );
