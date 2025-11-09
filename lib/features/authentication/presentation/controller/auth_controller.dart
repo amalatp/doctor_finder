@@ -44,7 +44,7 @@ class AuthController extends _$AuthController {
         phoneNumber.trim().isEmpty ||
         type.trim().isEmpty ||
         profileImage == null ||
-        location == null ||
+        location.trim().isEmpty ||
         latitude == null ||
         longitude == null) {
       state = AsyncError(
@@ -93,7 +93,7 @@ class AuthController extends _$AuthController {
         description.trim().isEmpty ||
         yearsOfExperience == null ||
         profileImage == null ||
-        location == null ||
+        location.trim().isEmpty ||
         latitude == null ||
         longitude == null) {
       state = AsyncError(

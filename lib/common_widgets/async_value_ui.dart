@@ -9,27 +9,30 @@ extension AsyncValueUI<T> on AsyncValue {
   void showAlertDialogOnError(BuildContext context) {
     if (!isLoading && hasError) {
       if (ModalRoute.of(context)?.isCurrent == false) return;
-    }
-    final message = _errorMessage(error);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(Icons.error, color: Colors.red, size: 40),
-        title: Text(
-          message,
-          style: AppStyles.normalTextStyle.copyWith(color: AppStyles.mainColor),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: AppStyles.mainColor),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Close'),
+
+      final message = _errorMessage(error);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(Icons.error, color: Colors.red, size: 40),
+          title: Text(
+            message,
+            style: AppStyles.normalTextStyle.copyWith(
+              color: AppStyles.mainColor,
+            ),
           ),
-        ],
-      ),
-    );
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: AppStyles.mainColor),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 
