@@ -28,17 +28,16 @@ GoRouter goRouter(Ref ref) {
   final firebaseAuth = ref.watch(firebaseAuthProvider);
   return GoRouter(
     initialLocation: '/splash',
-    debugLogDiagnostics: false,
+    debugLogDiagnostics: true,
     redirect: (context, state) {
       final isLoggedIn = firebaseAuth.currentUser != null;
       if (isLoggedIn &&
           (state.uri.toString() == '/signIn' ||
               state.uri.toString() == '/userRegister' ||
               state.uri.toString() == '/doctorRegister')) {
-        return '/home';
-      } else if (!isLoggedIn &&
-          (state.uri.toString() != '/home' ||
-              state.uri.toString() != '/account')) {
+        return '/main';
+      }
+      if (!isLoggedIn && state.uri.toString() == '/main') {
         return '/signIn';
       }
       return null;
