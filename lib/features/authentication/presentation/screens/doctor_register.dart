@@ -68,7 +68,7 @@ class _DoctorRegisterState extends ConsumerState<DoctorRegister> {
 
   @override
   Widget build(BuildContext context) {
-    final listOfSpecialisations = ref.watch(specialisationProvider);
+    final listOfSpecialisations = ref.watch(specialisationListProvider);
     final state = ref.watch(authControllerProvider);
     ref.listen<AsyncValue>(authControllerProvider, (_, state) {
       state.showAlertDialogOnError(context);

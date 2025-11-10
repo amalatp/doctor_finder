@@ -12,7 +12,7 @@ class AppStyles {
   static final titleTextStyle = TextStyle(
     fontSize: SizeCofig.getProportionateHeight(18),
     color: Colors.white,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     fontFamily: 'Madimi One',
   );
 
