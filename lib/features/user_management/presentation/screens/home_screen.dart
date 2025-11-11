@@ -2,7 +2,9 @@ import 'package:doctor_finder/common_widgets/async_value_widget.dart';
 import 'package:doctor_finder/features/authentication/data/auth_repository.dart';
 import 'package:doctor_finder/features/authentication/domain/app_user.dart';
 import 'package:doctor_finder/features/user_management/data/users_repository.dart';
+import 'package:doctor_finder/features/user_management/presentation/widgets/doctor_item_widget.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/doctor_speciality_widget.dart';
+import 'package:doctor_finder/features/user_management/presentation/widgets/nearby_doctors_widget.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +63,8 @@ class HomeScreen extends ConsumerWidget {
               ),
               SizedBox(height: SizeCofig.getProportionateHeight(15)),
               DoctorSpecialityWidget(),
+              SizedBox(height: SizeCofig.getProportionateHeight(15)),
+              NearbyDoctorsWidget(),
             ],
           ),
         ),

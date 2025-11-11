@@ -43,7 +43,7 @@ class NearbyDoctorsWidget extends ConsumerWidget {
             ],
           ),
           SizedBox(
-            height: SizeCofig.getProportionateHeight(150),
+            height: SizeCofig.getProportionateHeight(200),
             child: AsyncValueWidget<List<Doctor>>(
               value: listOfDoctorsAsyncValue,
               data: (doctors) {
@@ -54,7 +54,10 @@ class NearbyDoctorsWidget extends ConsumerWidget {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           final doctor = doctors[index];
-                          return DoctorItemWidget(doctor: doctor);
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: DoctorItemWidget(doctor: doctor),
+                          );
                         },
                       );
               },
