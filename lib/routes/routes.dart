@@ -1,8 +1,10 @@
+import 'package:doctor_finder/features/authentication/domain/doctor.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/doctor_register.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/user_register.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/onboarding_screen.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/splash_screen.dart';
+import 'package:doctor_finder/features/user_management/presentation/screens/doctor_details_screen.dart';
 import 'package:doctor_finder/features/user_management/presentation/screens/main_screen.dart';
 import 'package:doctor_finder/routes/go_router_refresh_stream.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +21,7 @@ enum AppRoutes {
   doctorRegister,
   userRegister,
   main,
+  doctorDetails,
 }
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
@@ -73,6 +76,14 @@ GoRouter goRouter(Ref ref) {
         path: '/main',
         name: AppRoutes.main.name,
         builder: (context, state) => const MainScreen(),
+      ),
+      GoRoute(
+        path: '/doctorDetails',
+        name: AppRoutes.doctorDetails.name,
+        builder: (context, state) {
+          final doctor = state.extra as Doctor;
+          return DoctorDetailsScreen(doctor: doctor);
+        },
       ),
     ],
   );
