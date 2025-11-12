@@ -1,3 +1,4 @@
+import 'package:doctor_finder/features/user_management/presentation/provider/specialisation_prvider.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:doctor_finder/utils/specialisation_list.dart';
@@ -27,7 +28,9 @@ class SpecialityListInDoctorsScreen extends ConsumerWidget {
           final icon = specialityIcons[speciality];
           return InkWell(
             onTap: () {
-              // Handle speciality tap
+              ref
+                  .read(specialisationNotifierProvider.notifier)
+                  .setSpecialisation(speciality);
             },
             child: Container(
               height: SizeCofig.getProportionateHeight(60),

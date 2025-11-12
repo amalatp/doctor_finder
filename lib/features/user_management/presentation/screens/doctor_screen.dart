@@ -2,6 +2,7 @@ import 'package:doctor_finder/common_widgets/async_value_ui.dart';
 import 'package:doctor_finder/common_widgets/async_value_widget.dart';
 import 'package:doctor_finder/features/authentication/domain/doctor.dart';
 import 'package:doctor_finder/features/user_management/data/users_repository.dart';
+import 'package:doctor_finder/features/user_management/presentation/provider/specialisation_prvider.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/doctor_list_tile_widget.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/search_bar_widget.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/speciality_list_in_doctors_screen.dart';
@@ -15,9 +16,10 @@ class DoctorScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final doctorsAsyncValue = ref.watch(loadDoctorsProvider(''));
+    final specialization = ref.watch(specialisationNotifierProvider);
+    final doctorsAsyncValue = ref.watch(loadDoctorsProvider(specialization));
 
-    ref.listen<AsyncValue>(loadDoctorsProvider(''), (_, state) {
+    ref.listen<AsyncValue>(loadDoctorsProvider(specialization), (_, state) {
       state.showAlertDialogOnError(context);
     });
     return Scaffold(
@@ -36,7 +38,11 @@ class DoctorScreen extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppStyles.mainColor,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    ref
+                        .read(specialisationNotifierProvider.notifier)
+                        .setSpecialisation('');
+                  },
                   child: Text(
                     "Show All",
                     style: AppStyles.normalTextStyle.copyWith(fontSize: 12),

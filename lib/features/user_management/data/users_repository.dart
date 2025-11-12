@@ -31,7 +31,7 @@ class UsersRepository {
         .where('type', isEqualTo: 'Doctor');
 
     if (specialisation.isNotEmpty) {
-      query = query.where('specialisation', isEqualTo: specialisation);
+      query = query.where('specialization', isEqualTo: specialisation);
     }
     return query.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
