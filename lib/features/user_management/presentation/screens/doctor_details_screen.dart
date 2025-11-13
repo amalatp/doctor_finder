@@ -1,9 +1,11 @@
+import 'package:doctor_finder/common_widgets/common_button.dart';
 import 'package:doctor_finder/features/authentication/domain/doctor.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/rating_stars.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class DoctorDetailsScreen extends ConsumerStatefulWidget {
   const DoctorDetailsScreen({super.key, required this.doctor});
@@ -16,6 +18,55 @@ class DoctorDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+
+  String? get _formatedDate {
+    if (_selectedDate == null) return null;
+    return DateFormat('dd-MM-yyyy').format(_selectedDate!);
+  }
+
+  Future<void> _pickDate() async {
+    DateTime now = DateTime.now();
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? now,
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(now.year, now.month, now.day + 30),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  String? get _formatedTime {
+    if (_selectedTime == null) return null;
+    final now = DateTime.now();
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      _selectedTime!.hour,
+      _selectedTime!.minute,
+    );
+    return DateFormat('hh:mm a').format(dateTime);
+  }
+
+  Future<void> _pickTime() async {
+    TimeOfDay now = TimeOfDay.now();
+    TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? now,
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -157,6 +208,151 @@ class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: SizeCofig.getProportionateHeight(100),
+                      width: SizeCofig.screenWidth * 0.27,
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.people,
+                            size: 50,
+                            color: AppStyles.mainColor,
+                          ),
+                          Text("Patients", textAlign: TextAlign.center),
+                          Text("${widget.doctor.numberOfPatients} +"),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: SizeCofig.getProportionateHeight(100),
+                      width: SizeCofig.screenWidth * 0.27,
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.timelapse,
+                            size: 50,
+                            color: AppStyles.mainColor,
+                          ),
+                          Text("Experience", textAlign: TextAlign.center),
+                          Text("${widget.doctor.yearsOfExperience} +"),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: SizeCofig.getProportionateHeight(100),
+                      width: SizeCofig.screenWidth * 0.27,
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.reviews,
+                            size: 50,
+                            color: AppStyles.mainColor,
+                          ),
+                          Text("Reviews", textAlign: TextAlign.center),
+                          Text("300"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "About",
+                  style: AppStyles.titleTextStyle.copyWith(color: Colors.black),
+                ),
+                const SizedBox(height: 10),
+                Text(widget.doctor.description, textAlign: TextAlign.justify),
+                const SizedBox(height: 10),
+                Text(
+                  "Day",
+                  style: AppStyles.normalTextStyle.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.calendar_month,
+                      color: AppStyles.mainColor,
+                      size: 60,
+                    ),
+                    GestureDetector(
+                      onTap: _pickDate,
+                      child: Container(
+                        width: SizeCofig.screenWidth * 0.5,
+                        height: SizeCofig.getProportionateHeight(40),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppStyles.mainColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _selectedDate != null
+                              ? _formatedDate!
+                              : "Tap to select date",
+                          style: AppStyles.normalTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      color: AppStyles.mainColor,
+                      size: 60,
+                    ),
+                    GestureDetector(
+                      onTap: _pickTime,
+                      child: Container(
+                        width: SizeCofig.screenWidth * 0.5,
+                        height: SizeCofig.getProportionateHeight(40),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppStyles.mainColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _selectedTime != null
+                              ? _formatedTime!
+                              : "Tap to select time",
+                          style: AppStyles.normalTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                CommonButton(
+                  isLoading: false,
+                  onTap: () {},
+                  title: 'Book Appointment',
+                ),
+                const SizedBox(height: 30),
               ],
             ),
           ),
