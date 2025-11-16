@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_finder/features/bookings/domain/booking.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'booking_repository.g.dart';
 
 class BookingRepository {
   BookingRepository(this._firestore);
@@ -32,4 +36,22 @@ class BookingRepository {
               snapshot.docs.map((doc) => Booking.fromMap(doc.data())).toList(),
         );
   }
+}
+
+@riverpod
+BookingRepository bookingRepository(Ref ref) {
+  final firestore = FirebaseFirestore.instance;
+  return BookingRepository(firestore);
+}
+
+@riverpod
+Stream<List<Booking>> loadUserBookings(Ref ref, String userId) {
+  final bookingRepository = ref.watch(bookingRepositoryProvider);
+  return bookingRepository.loadUserBookings(userId);
+}
+
+@riverpod
+Stream<List<Booking>> loadDoctorBookings(Ref ref, String doctorId) {
+  final bookingRepository = ref.watch(bookingRepositoryProvider);
+  return bookingRepository.loadDoctorBookings(doctorId);
 }

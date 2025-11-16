@@ -1,10 +1,17 @@
+import 'dart:developer';
+
+import 'package:doctor_finder/common_widgets/async_value_ui.dart';
 import 'package:doctor_finder/common_widgets/common_button.dart';
+import 'package:doctor_finder/features/authentication/data/auth_repository.dart';
 import 'package:doctor_finder/features/authentication/domain/doctor.dart';
+import 'package:doctor_finder/features/bookings/domain/booking.dart';
+import 'package:doctor_finder/features/bookings/presentation/controller/booking_controller.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/rating_stars.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class DoctorDetailsScreen extends ConsumerStatefulWidget {
@@ -69,6 +76,11 @@ class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserId = ref.watch(currentUserProvider)!.uid;
+    final state = ref.watch(bookingControllerProvider);
+    ref.listen<AsyncValue>(bookingControllerProvider, (_, state) {
+      return state.showAlertDialogOnError(context);
+    });
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -348,8 +360,62 @@ class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
                 ),
                 const SizedBox(height: 10),
                 CommonButton(
-                  isLoading: false,
-                  onTap: () {},
+                  isLoading: state.isLoading,
+                  onTap: () async {
+                    if (_selectedDate == null || _selectedTime == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please select date and time"),
+                        ),
+                      );
+                      return;
+                    }
+                    final myBooking = Booking(
+                      userId: currentUserId,
+                      doctorId: widget.doctor.userId,
+                      date: _formatedDate!,
+                      time: _formatedTime!,
+                      service: widget.doctor.specialization,
+                    );
+                    final result = await ref
+                        .read(bookingControllerProvider.notifier)
+                        .saveBooking(booking: myBooking);
+                    log("Booking result: $result");
+
+                    if (result) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text(
+                              "Appointment booked successfully",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            icon: const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 120,
+                            ),
+                            alignment: Alignment.center,
+                            actions: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppStyles.mainColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  "Ok",
+                                  style: AppStyles.normalTextStyle,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
                   title: 'Book Appointment',
                 ),
                 const SizedBox(height: 30),
