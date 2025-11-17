@@ -6,7 +6,9 @@ import 'package:doctor_finder/features/authentication/data/auth_repository.dart'
 import 'package:doctor_finder/features/authentication/domain/doctor.dart';
 import 'package:doctor_finder/features/bookings/domain/booking.dart';
 import 'package:doctor_finder/features/bookings/presentation/controller/booking_controller.dart';
+import 'package:doctor_finder/features/chat/domain/conversation_args.dart';
 import 'package:doctor_finder/features/user_management/presentation/widgets/rating_stars.dart';
+import 'package:doctor_finder/routes/routes.dart';
 import 'package:doctor_finder/utils/app_styles.dart';
 import 'package:doctor_finder/utils/size_config.dart';
 import 'package:flutter/material.dart';
@@ -198,7 +200,16 @@ class _DoctorDetailsScreenState extends ConsumerState<DoctorDetailsScreen> {
                         child: Row(
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.pushNamed(
+                                  AppRoutes.converstation.name,
+                                  extra: ConversationArgs(
+                                    currentUserId: currentUserId,
+                                    recieverId: widget.doctor.userId,
+                                    recieverName: widget.doctor.name,
+                                  ),
+                                );
+                              },
                               icon: Icon(
                                 Icons.message,
                                 color: Colors.white,

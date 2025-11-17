@@ -2,6 +2,8 @@ import 'package:doctor_finder/features/authentication/domain/doctor.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/doctor_register.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:doctor_finder/features/authentication/presentation/screens/user_register.dart';
+import 'package:doctor_finder/features/chat/domain/conversation_args.dart';
+import 'package:doctor_finder/features/chat/presentation/screens/conversation_screen.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/onboarding_screen.dart';
 import 'package:doctor_finder/features/splash_and_onboarding/presentation/splash_screen.dart';
 import 'package:doctor_finder/features/user_management/presentation/screens/doctor_details_screen.dart';
@@ -22,6 +24,7 @@ enum AppRoutes {
   userRegister,
   main,
   doctorDetails,
+  converstation,
 }
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
@@ -83,6 +86,18 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final doctor = state.extra as Doctor;
           return DoctorDetailsScreen(doctor: doctor);
+        },
+      ),
+      GoRoute(
+        path: '/converstation',
+        name: AppRoutes.converstation.name,
+        builder: (context, state) {
+          final args = state.extra as ConversationArgs;
+          return ConversationScreen(
+            currentUserId: args.currentUserId,
+            recieverId: args.recieverId,
+            recieverName: args.recieverName,
+          );
         },
       ),
     ],
