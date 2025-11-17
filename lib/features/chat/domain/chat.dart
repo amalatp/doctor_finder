@@ -43,7 +43,7 @@ class Chat {
       chatId: map['chatId'] as String,
       lastMessage: map['lastMessage'] as String,
       time: map['time'] as String,
-      userIds: List<String>.from((map['userIds'] as List<String>)),
+      userIds: List<String>.from((map['userIds'] ?? [])),
     );
   }
 

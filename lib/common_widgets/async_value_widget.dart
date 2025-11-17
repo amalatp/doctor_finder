@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,7 +13,10 @@ class AsyncValueWidget<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return value.when(
       data: data,
-      error: (error, stackTrace) => Text('Error: $error'),
+      error: (error, stackTrace) {
+        log("  Error: $error\n$stackTrace");
+        return Text('Error: $error');
+      },
       loading: () => Center(child: const CircularProgressIndicator()),
     );
   }

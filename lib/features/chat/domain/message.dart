@@ -9,7 +9,7 @@ class Message {
   final String message;
   final String time;
   Message({
-    required this.messageId,
+    this.messageId = '',
     required this.chatId,
     required this.senderId,
     required this.receiverId,
